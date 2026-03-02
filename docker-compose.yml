@@ -16,7 +16,7 @@ services:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - OLLAMA_HOST=http://ollama:11434
-      - LLM_MODEL=${LLM_MODEL:-qwen2.5:14b}
+      - LLM_MODEL=${LLM_MODEL:-qwen2.5:7b}
       - EMBEDDING_MODEL=${EMBEDDING_MODEL:-nomic-embed-text}
     env_file:
       - .env
@@ -27,8 +27,8 @@ services:
         condition: service_healthy
       qdrant:
         condition: service_healthy
-      ollama:
-        condition: service_started
+      ollama-init:
+        condition: service_completed_successfully
     restart: unless-stopped
 
   # ==== Neo4j – graph storage for LightRAG knowledge graph ===================
@@ -69,8 +69,7 @@ services:
       retries: 10
     restart: unless-stopped
 
-  # ==== Ollama – local LLM server (Qwen2.5-14B + embedding model) ============
-  #  Qwen 14B model is pretty much max that you can run with 5060
+  # ==== Ollama – local LLM server (Qwen2.5-7B + embedding model) =============
   ollama:
     image: ollama/ollama:latest
     container_name: askme-ollama
@@ -78,6 +77,12 @@ services:
       - "11434:11434"
     volumes:
       - ollama_models:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
     # GPU passthrough – requires NVIDIA Container Toolkit on host
     deploy:
       resources:
@@ -87,6 +92,22 @@ services:
               count: all
               capabilities: [gpu]
     restart: unless-stopped
+
+  # ==== Pull required models once on first start ==============================
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: askme-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama pull qwen2.5:7b &&
+        ollama pull nomic-embed-text
+    restart: "no"
 
 volumes:
   neo4j_data:
