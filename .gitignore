@@ -1,0 +1,30 @@
+# ==== Data (it contains large files which should never be tracked) ===========
+data/*
+
+# ==== Secrets ================================================================
+.env
+.env.local
+.env.*.local
+
+# ==== Python
+__pycache__/*
+.venv/
+build/
+.cache
+.mypy_cache/
+.ruff_cache/
+.pytest_cache
+.coverage
+htmlcov/
+
+# ==== Jupyter notebooks ======================================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ==== OS files ===============================================================
+.Thumbs.db
+
+# ==== Python cache ===========================================================  
+src/askme/__pycache__
+*.pyc
+*.pyo
