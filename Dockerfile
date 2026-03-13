@@ -34,7 +34,7 @@ ENV UV_LINK_MODE=copy \
 # ==== Set Production image with core dependencies only =======================
 FROM base AS production
 
-COPY pyproject.toml uv.lock* ./
+COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-install-project 2>/dev/null || \
     uv sync --no-dev --no-install-project
