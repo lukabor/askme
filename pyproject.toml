@@ -56,9 +56,12 @@ eval = [
 ]
 
 [project.scripts]
-askme-ingest  = "src.ingestion.cli:main"
-askme-query   = "src.api.cli:main"
-askme-eval    = "src.evaluation.cli:main"
+askme-ingest  = "askme.ingestion.cli:main"
+askme-query   = "askme.api.cli:main"
+askme-eval    = "askme.evaluation.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/askme"]
 
 [build-system]
 requires = ["hatchling"]
