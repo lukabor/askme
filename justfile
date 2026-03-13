@@ -96,6 +96,10 @@ clean-all:
 smoke-test:
     docker compose exec askme uv run python scripts/smoke_test.py
 
+# Run any script inside the askme container: just run scripts/test_extract.py
+run script:
+    docker compose exec askme uv run python {{ script }}
+
 # ── Health checks ─────────────────────────────────────────────────────────────
 
 # Check all services are reachable
