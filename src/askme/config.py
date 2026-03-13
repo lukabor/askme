@@ -21,7 +21,20 @@ class Settings(BaseSettings):
     data_dir: str = "/usr/askme/data"
     rag_working_dir: str = "/usr/askme/data/rag_storage"
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    # Ingestion
+    chunk_size: int = 1200
+    chunk_overlap: int = 200
+    minhash_threshold: float = 0.85
+
+    # LightRAG runtime
+    max_async: int = 4
+    default_query_mode: str = "hybrid"
+
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",
+    }
 
 
 settings = Settings()

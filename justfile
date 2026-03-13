@@ -81,17 +81,20 @@ ollama-shell:
 
 # Wipe vector + graph stores (keeps models). Use when re-ingesting from scratch
 clean-stores:
-    @echo "WARNING: This will delete all Neo4j and Qdrant data."
-    @read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
     docker compose down
-    docker volume rm askme_neo4j_data askme_qdrant_data || true
-    docker compose up -d
+    docker volume rm askme_neo4j_data askme_neo4j_logs askme_qdrant_data || true
 
 # Full teardown: stop everything and remove all volumes (including models)
 clean-all:
     @echo "WARNING: This will delete ALL volumes including downloaded models."
     @read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
     docker compose down -v
+
+# ── Tests ─────────────────────────────────────────────────────────────────────
+
+# End-to-end smoke test: insert one doc, query it
+smoke-test:
+    docker compose exec askme uv run python scripts/smoke_test.py
 
 # ── Health checks ─────────────────────────────────────────────────────────────
 

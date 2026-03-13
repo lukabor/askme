@@ -9,7 +9,8 @@ dependencies = [
 
     #  LLM / Embeddings
     # if not needed these will be removed
-    "openai>=1.0",          # OpenAI-compatible client (used for Ollama too)
+    "ollama>=0.4",           # Ollama Python client (required by lightrag llm/ollama)
+    "openai>=1.0",          # OpenAI-compatible client
     "anthropic>=0.40",      # optional fallback
 
     # Vector store
