@@ -93,6 +93,14 @@ clean-all:
     @read -p "Are you sure? [y/N] " confirm && [ "$$confirm" = "y" ]
     docker compose down -v
 
+# ── Health checks ─────────────────────────────────────────────────────────────
+
+# Check all services are reachable
+check:
+    @echo "Neo4j...";   curl -sf http://localhost:7474 > /dev/null && echo "  OK" || echo "  FAIL"
+    @echo "Qdrant...";  curl -sf http://localhost:6333/healthz > /dev/null && echo "  OK" || echo "  FAIL"
+    @echo "Ollama...";  curl -sf http://localhost:11434/api/tags > /dev/null && echo "  OK" || echo "  FAIL"
+
 # ── Info ──────────────────────────────────────────────────────────────────────
 
 # Show service URLs
