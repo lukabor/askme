@@ -7,8 +7,7 @@ data/*
 .env.*.local
 
 # ==== Python
-__pycyache__/
-*.py[cond]
+__pycache__/*
 .venv/
 build/
 .cache
@@ -25,3 +24,7 @@ htmlcov/
 # ==== OS files ===============================================================
 .Thumbs.db
 
+# ==== Python cache ===========================================================  
+src/askme/__pycache__
+*.pyc
+*.pyo
