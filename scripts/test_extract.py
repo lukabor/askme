@@ -4,11 +4,13 @@ from askme.ingestion.extract import extract, supported_suffixes
 
 archive = Path("/usr/askme/data/notebook_archive")
 
+_SKIP = {"site-packages", "__pycache__", "x86_64-pc-linux-gnu-library"}
+
 for suffix in sorted(supported_suffixes()):
     files = [
-        p for p in archive.rglob(f"*{suffix}")
-        if "site-packages" not in str(p) and "__pycache__" not in str(p)
-        and "x86_64-pc-linux-gnu-library" not in str(p)
+        p for p in archive.rglob("*")
+        if p.suffix.lower() == suffix
+        and not any(s in p.parts for s in _SKIP)
     ]
     if not files:
         print(f"{suffix}: no files found")
